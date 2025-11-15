@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms - Hotel Booking System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">🏨 Grand Hotel</div>
+            <div class="nav-menu">
+                <a href="index.html">Home</a>
+                <a href="rooms.html">Rooms</a>
+                <a href="bookings.html" id="myBookingsLink" style="display: none;">My Bookings</a>
+                <a href="login.html" id="loginLink">Login</a>
+                <a href="#" id="logoutLink" style="display: none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Our Rooms</h1>
+            <p>Choose from our selection of luxury accommodations</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="roomsGrid" class="rooms-grid">
+            <!-- Rooms will be loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Book Room</h2>
+            <div id="selectedRoomDetails"></div>
+            <form id="bookingForm">
+                <input type="hidden" id="selectedRoomId">
+                <div class="form-group">
+                    <label>Check-in Date</label>
+                    <input type="date" id="checkIn" required>
+                </div>
+                <div class="form-group">
+                    <label>Check-out Date</label>
+                    <input type="date" id="checkOut" required>
+                </div>
+                <div class="form-group">
+                    <label>Number of Guests</label>
+                    <input type="number" id="guests" min="1" max="4" value="2" required>
+                </div>
+                <div class="booking-summary">
+                    <p><strong>Total Nights:</strong> <span id="totalNights">0</span></p>
+                    <p><strong>Price per Night:</strong> ₹<span id="pricePerNight">0</span></p>
+                    <p><strong>Total Amount:</strong> ₹<span id="totalAmount">0</span></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Proceed to Payment</button>
+                <div id="bookingError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h2>Payment Details</h2>
+            <div class="payment-summary">
+                <p><strong>Room:</strong> <span id="paymentRoomName"></span></p>
+                <p><strong>Amount to Pay:</strong> ₹<span id="paymentAmount"></span></p>
+            </div>
+            
+            <!-- Payment Method Selection -->
+            <div class="payment-method-tabs">
+                <button class="payment-tab active" onclick="selectPaymentMethod('card')">💳 Card Payment</button>
+                <button class="payment-tab" onclick="selectPaymentMethod('upi')">📱 UPI Payment</button>
+            </div>
+
+            <!-- Card Payment Form -->
+            <form id="paymentForm">
+                <input type="hidden" id="paymentBookingId">
+                <input type="hidden" id="paymentMethod" value="card">
+                
+                <div id="cardPaymentSection">
+                    <div class="form-group">
+                        <label>Card Holder Name *</label>
+                        <input type="text" id="cardName" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number *</label>
+                        <input type="text" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date *</label>
+                            <input type="text" id="expiryDate" maxlength="5" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV *</label>
+                            <input type="text" id="cvv" maxlength="3" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UPI Payment Section -->
+                <div id="upiPaymentSection" style="display: none;">
+                    <div class="form-group">
+                        <label>UPI ID *</label>
+                        <input type="text" id="upiId" placeholder="yourname@paytm / yourname@okaxis">
+                    </div>
+                    <div class="upi-info">
+                        <p>📱 Enter your UPI ID to complete payment</p>
+                        <p class="upi-note">Supported: Google Pay, PhonePe, Paytm, BHIM, etc.</p>
+                        <p class="upi-note">Example: 9876543210@paytm or username@okaxis</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">Complete Payment</button>
+                <div id="paymentError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content success-modal">
+            <div class="success-icon">✓</div>
+            <h2>Payment Successful!</h2>
+            <p>Your booking has been confirmed.</p>
+            <div class="success-details">
+                <p><strong>Booking ID:</strong> <span id="successBookingId"></span></p>
+                <p><strong>Amount Paid:</strong> ₹<span id="successAmount"></span></p>
+            </div>
+            <div class="success-actions">
+                <button class="btn btn-primary" onclick="downloadInvoiceNow()">📄 Download Invoice</button>
+                <button class="btn btn-secondary" onclick="closeSuccessModal()">View My Bookings</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Grand Hotel. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="rooms.js"></script>
+</body>
+</html>
